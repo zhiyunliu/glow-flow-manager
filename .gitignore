@@ -1,0 +1,31 @@
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# IDE
+.vscode/
+.idea/
+
+# local config
+config-local-private.json
+
+# logs
+*.log
+log/
+
+# frontend
+web/node_modules/
+web/dist/*
+!web/dist/readme.md
+
+go.sum
+go.work.sum
+
+
+

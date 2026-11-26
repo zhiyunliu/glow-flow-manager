@@ -1,0 +1,161 @@
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: #303133;
+  background: #f2f3f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-layout {
+  height: 100%;
+}
+
+.app-aside {
+  display: flex;
+  flex-direction: column;
+  background: #1f2633;
+  transition: width 0.2s;
+  overflow: hidden;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 20px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.app-menu {
+  flex: 1;
+  border-right: none;
+  --el-menu-bg-color: #1f2633;
+  --el-menu-text-color: #bfc5d2;
+  --el-menu-hover-bg-color: #2b3445;
+  --el-menu-active-color: #fff;
+}
+
+.app-menu .el-menu-item.is-active {
+  background: #409eff;
+}
+
+.app-collapse {
+  padding: 14px 22px;
+  color: #bfc5d2;
+  cursor: pointer;
+}
+
+.app-main {
+  padding: 16px;
+  overflow: auto;
+}
+
+/* 列表页 */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.page-title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.page-desc {
+  margin: 0;
+  color: #909399;
+  font-size: 13px;
+}
+
+.filter-form .el-form-item {
+  margin-bottom: 12px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.mono textarea,
+textarea.mono {
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace !important;
+  font-size: 12px !important;
+}
+
+.json-view {
+  margin: 0;
+  padding: 10px 12px;
+  max-height: 420px;
+  overflow: auto;
+  background: #f7f8fa;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.text-muted {
+  color: #909399;
+}
+
+.text-warning {
+  color: var(--el-color-warning);
+}
+
+.text-danger {
+  color: #f56c6c;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* X6 连线动画 */
+@keyframes gf-ant-line {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}

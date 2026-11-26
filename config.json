@@ -1,0 +1,63 @@
+{
+	"app": {
+		"mode": "release",
+		"ip_mask": "192.168"
+	},
+	"dbs": {
+		"glowflow": {
+			"proto": "sqlserver",
+			"conn": "server=localhost;port=1433;database=glowflow;user id=sa;password={GLOWFLOW_DB_PASSWORD};encrypt=disable;app name=manager-glow",
+			"max_open": 20,
+			"max_idle": 10,
+			"life_time": 600,
+			"show_query_log": false
+		}
+	},
+	"servers": {
+		"apiserver": {
+			"config": {
+				"addr": ":8190",
+				"status": "start",
+				"read_timeout": 30,
+				"write_timeout": 150,
+				"read_header_timeout": 30,
+				"max_header_bytes": 1048576
+			},
+			"middlewares": [
+				{
+					"name": "metrics",
+					"data": {
+						"proto": "prometheus"
+					}
+				}
+			]
+		}
+	},
+	"emails": [
+		{
+			"smtpname": "test1",
+			"host": "smtp.example.com",
+			"port": 465,
+			"ssl": true,
+			"username": "noreply@example.com",
+			"password": "",
+			"from": "流程通知 <noreply@example.com>"
+		},
+		{
+			"smtpname": "test2",
+			"host": "smtp2.example.com",
+			"port": 25,
+			"ssl": false,
+			"username": "",
+			"password": "",
+			"from": "alert@example.com"
+		}
+	],
+	"manager": {
+		"db_name": "glowflow",
+		"operator_headers": ["X-Auth-User-Id", "X-Perm-Uid", "X-Operator"],
+		"default_operator": "anonymous",
+		"debug_timeout": 30,
+		"debug_max_timeout": 120
+	}
+}

@@ -1,0 +1,81 @@
+version: '3'
+
+env:
+  GIN_MODE: release
+
+vars:
+  GLUE_GLOBAL: github.com/zhiyunliu/glue
+  GO_BIN: go
+  CI_BIN: bin/manager-glow
+  LINT_BIN: golangci-lint
+  OPT_DIR: /opt/manager-glow
+  OPT_ETC: /opt/manager-glow/etc
+  WEB_DIR: ./web
+  DESTDIR: ''
+  GIT_COMMIT:
+    sh: git log --pretty=format:'%h' -1 2>/dev/null || true
+  GIT_TAG:
+    sh: git describe --tags "$(git rev-list --tags --max-count=1 2>/dev/null)" 2>/dev/null || true
+  VERSION: '{{if .GIT_TAG}}{{.GIT_TAG}}{{else}}dev{{end}}'
+  BUILD_TIME: '{{now | date "2006.01.02.15:04:05"}}'
+  PKG_VERSION: '{{now | date "2006.01.02.15:04:05"}}'
+  LDFLAGS: >-
+    -X "{{.GLUE_GLOBAL}}/global.GitCommit={{.GIT_COMMIT}}"
+    -X "{{.GLUE_GLOBAL}}/global.BuildTime={{.BUILD_TIME}}"
+    -X "{{.GLUE_GLOBAL}}/global.PkgVersion={{.PKG_VERSION}}"
+    -X "{{.GLUE_GLOBAL}}/global.Version={{.VERSION}}"
+
+tasks:
+  default:
+    desc: Build the admin UI and the service
+    cmds:
+      - task: build-web
+      - task: build
+
+  test:
+    desc: Run go vet and Go unit tests
+    cmds:
+      - '{{.GO_BIN}} vet ./...'
+      - '{{.GO_BIN}} test -count=1 ./...'
+
+  test-web:
+    desc: Run frontend unit tests
+    dir: '{{.WEB_DIR}}'
+    cmds:
+      - npm test
+
+  lint:
+    desc: Run golangci-lint
+    cmds:
+      - '{{.LINT_BIN}} run ./...'
+
+  build-web:
+    desc: Build the embedded admin UI into web/dist
+    dir: '{{.WEB_DIR}}'
+    cmds:
+      - npm ci
+      - npm run build
+
+  build:
+    desc: Build the Go service
+    cmds:
+      - "{{.GO_BIN}} build -ldflags '{{.LDFLAGS}}' -o {{.CI_BIN}} ."
+
+  clean:
+    desc: Remove the built binary
+    cmds:
+      - rm -f '{{.CI_BIN}}'
+
+  install:
+    desc: Install the service and configuration files
+    cmds:
+      - mkdir -p '{{.DESTDIR}}{{.OPT_DIR}}/bin'
+      - mkdir -p '{{.DESTDIR}}{{.OPT_ETC}}'
+      - mkdir -p '{{.DESTDIR}}{{.OPT_DIR}}/log'
+      - install -m 755 -D '{{.CI_BIN}}' '{{.DESTDIR}}{{.OPT_DIR}}/{{.CI_BIN}}'
+      - cp *.json '{{.DESTDIR}}{{.OPT_ETC}}/'
+
+  start:
+    desc: Start the installed service
+    cmds:
+      - '{{.OPT_DIR}}/{{.CI_BIN}} run -C {{.OPT_ETC}}/config.json'
